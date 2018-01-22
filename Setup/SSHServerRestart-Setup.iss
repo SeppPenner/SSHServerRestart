@@ -6,6 +6,7 @@
 #define MyAppPublisher "Hämmer Electronics"
 #define MyAppURL "www.softwareload24.de.tl"
 #define MyAppExeName "SSHServerRestart.exe"
+#define MyPath "F:\TODO\C# und VB\SSHServerRestart\Öffentlich\SSHServerRestart"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -24,10 +25,10 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
-LicenseFile=C:\Users\tim\Desktop\SSHServerRestart\SSHServerRestart\bin\Debug\License.txt
-OutputDir=C:\Users\tim\Desktop\SSHServerRestart\Setup
+LicenseFile={#MyPath}\SSHServerRestart\bin\Debug\License.txt
+OutputDir={#MyPath}\Setup
 OutputBaseFilename=SSHServerRestart-Setup
-SetupIconFile=C:\Users\tim\Desktop\SSHServerRestart\SSHServerRestart\Restart.ico
+SetupIconFile={#MyPath}\SSHServerRestart\Restart.ico
 Compression=lzma
 SolidCompression=yes
 
@@ -40,10 +41,10 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "C:\Users\tim\Desktop\SSHServerRestart\SSHServerRestart\bin\Debug\SSHServerRestart.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\tim\Desktop\SSHServerRestart\SSHServerRestart\bin\Debug\Config.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\tim\Desktop\SSHServerRestart\SSHServerRestart\bin\Debug\Renci.SshNet.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\tim\Desktop\SSHServerRestart\SSHServerRestart\bin\Debug\License.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyPath}\SSHServerRestart\bin\Debug\SSHServerRestart.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyPath}\SSHServerRestart\bin\Debug\Config.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyPath}\SSHServerRestart\bin\Debug\Renci.SshNet.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyPath}\SSHServerRestart\bin\Debug\License.txt"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
