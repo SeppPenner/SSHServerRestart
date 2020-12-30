@@ -2,11 +2,10 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "SSHServerRestart"
-#define MyAppVersion "1.0.1.0"
+#define MyAppVersion "1.0.2.0"
 #define MyAppPublisher "Hämmer Electronics"
 #define MyAppURL "www.softwareload24.de.tl"
 #define MyAppExeName "SSHServerRestart.exe"
-#define MyPath "C:\Users\Tim\Documents\Git\C# und VB\SSHServerRestart\Öffentlich\SSHServerRestart"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -25,10 +24,10 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={commonpf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
-LicenseFile={#MyPath}\SSHServerRestart\bin\Release\License.txt
-OutputDir={#MyPath}\Setup
+LicenseFile=..\src\SSHServerRestart\License.txt
+OutputDir=..\Setup
 OutputBaseFilename=SSHServerRestart-Setup
-SetupIconFile={#MyPath}\SSHServerRestart\Restart.ico
+SetupIconFile=..\src\SSHServerRestart\Restart.ico
 Compression=lzma
 SolidCompression=yes
 
@@ -41,10 +40,13 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "{#MyPath}\SSHServerRestart\bin\Release\SSHServerRestart.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#MyPath}\SSHServerRestart\bin\Release\Config.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#MyPath}\SSHServerRestart\bin\Release\Renci.SshNet.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#MyPath}\SSHServerRestart\bin\Release\License.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\SSHServerRestart\bin\Release\net5.0-windows\SSHServerRestart.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\SSHServerRestart\bin\Release\net5.0-windows\SSHServerRestart.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\SSHServerRestart\bin\Release\net5.0-windows\Config.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\SSHServerRestart\bin\Release\net5.0-windows\Renci.SshNet.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\SSHServerRestart\bin\Release\net5.0-windows\License.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\SSHServerRestart\bin\Release\net5.0-windows\SshNet.Security.Cryptography.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\SSHServerRestart\bin\Release\net5.0-windows\System.Xml.XPath.XmlDocument.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
