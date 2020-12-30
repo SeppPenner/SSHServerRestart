@@ -61,13 +61,13 @@ namespace SSHServerRestart
         /// <summary>
         /// Initializes the configuration.
         /// </summary>
-        /// <param name="filename">The file name.</param>
+        /// <param name="fileName">The file name.</param>
         /// <returns>The <see cref="Config"/>.</returns>
-        private static Config InitConfiguration(string filename)
+        private static Config InitConfiguration(string fileName)
         {
             try
             {
-                var xDocument = XDocument.Load(filename);
+                var xDocument = XDocument.Load(fileName);
                 return CreateObjectsFromString<Config>(xDocument);
             }
             catch (Exception ex)
