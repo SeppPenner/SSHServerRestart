@@ -33,7 +33,7 @@ namespace SSHServerRestart
                 Console.WriteLine("Konfiguration geladen.");
 
                 using var client = new SshClient(config.ServerName, config.ServerPort, config.User, config.Password);
-                Shutdown(client);
+                Restart(client);
             }
             catch (Exception ex)
             {
@@ -42,10 +42,10 @@ namespace SSHServerRestart
         }
 
         /// <summary>
-        /// Does a shutdown via SSH.
+        /// Does a restart via SSH.
         /// </summary>
         /// <param name="client">The SSH client.</param>
-        private static void Shutdown(SshClient client)
+        private static void Restart(SshClient client)
         {
             client.Connect();
             Console.WriteLine("Prozesse werden beendet");
