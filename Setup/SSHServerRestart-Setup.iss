@@ -40,13 +40,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "..\src\SSHServerRestart\bin\Release\net5.0-windows\SSHServerRestart.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\SSHServerRestart\bin\Release\net5.0-windows\SSHServerRestart.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\SSHServerRestart\bin\Release\net5.0-windows\Config.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\SSHServerRestart\bin\Release\net5.0-windows\Renci.SshNet.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\SSHServerRestart\bin\Release\net5.0-windows\License.txt"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\SSHServerRestart\bin\Release\net5.0-windows\SshNet.Security.Cryptography.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\SSHServerRestart\bin\Release\net5.0-windows\System.Xml.XPath.XmlDocument.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\SSHServerRestart\bin\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
