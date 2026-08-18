@@ -28,7 +28,9 @@ Layout inside `src/SSHServerRestart`:
   `Config.xml` in the field.
 - `Config.xml`: the shipped example configuration with the dummy address `202.202.202.202`. Copied
   to the output directory with `CopyToOutputDirectory=Always`, so a local edit in `bin` is
-  overwritten by the next build, and the installer ships this file.
+  overwritten by the next build. The installer ships this file, which is why
+  `build-setup-files.bat` overwrites the published copy with the one from `HEAD`, see the
+  credentials quirk below.
 - `License.txt`: a byte-identical copy of the repository root `License.txt`, also copied to the
   output directory. Inno Setup reads the one in the project folder as its `LicenseFile`, so both
   have to stay in sync.
@@ -38,15 +40,18 @@ Repository root: `README.md` (the only user documentation, badges plus a link to
 `Changelog.md`, `License.txt` (MIT), `.gitignore`, `.gitattributes` and the `Setup` folder. There is
 no `Updating.md`, no `HowToUse.md` and no screenshots.
 
-`Setup` holds three files:
+`Setup` holds two tracked files:
 
 - `SSHServerRestart-Setup.iss`: the Inno Setup 6 script. `MyAppVersion` is maintained by hand, it
   does **not** come from GitVersion.
 - `build-setup-files.bat`: deletes every `bin` and `obj` below `src`, publishes self contained to
-  `src/SSHServerRestart/bin/publish` and deletes the `*.pdb` files. It does not compile the
-  installer, that is a separate `ISCC.exe` call.
-- `SSHServerRestart-Setup.exe`: the built installer, tracked in git even though `.gitignore` ignores
-  `*.exe`. It only gets into a commit with `git add -f`.
+  `src/SSHServerRestart/bin/publish`, deletes the `*.pdb` files and overwrites the published
+  `Config.xml` with the one from `HEAD`. It does not compile the installer, that is a separate
+  `ISCC.exe` call.
+
+`SSHServerRestart-Setup.exe` lands in the same folder when the installer is compiled, but it is
+**not** tracked any more. `.gitignore` ignores `*.exe`, and the installer belongs to the GitHub
+release of its tag, not into a commit.
 
 ## Build
 
@@ -133,6 +138,14 @@ Do not silently "clean up" these, they are existing behaviour:
   is the shipped behaviour, the file is deliberately not looked up in `%APPDATA%`.
 - **The password is stored in plain text** in `Config.xml`, next to the executable, and the shipped
   example uses `root`. That is the design of this tool, do not add half of a credential store to it.
+- **The installer must never ship real credentials.** `Config.xml` is tracked and holds the dummy
+  values, but it is also the file a developer edits to test against a real DiskStation, and
+  `CopyToOutputDirectory=Always` copies whatever is in the working tree into the publish. To keep
+  that out of a published installer, `build-setup-files.bat` overwrites the published `Config.xml`
+  with `git show HEAD:src/SSHServerRestart/Config.xml` (piped through `find /v ""` to get CRLF back)
+  and aborts instead of shipping the working copy if git cannot deliver. It also prints a note when
+  the local `Config.xml` differs, which is the moment to make sure it never reaches a commit.
+  Do not remove that step, and do not commit a filled `Config.xml`.
 - **A broken or missing `Config.xml` is not an error.** `InitConfiguration` catches everything and
   returns `null`, `Main` then falls back to `new Config()`, which means empty host, port `0` and
   empty credentials. The run fails a moment later in `SshClient`, and the real cause has already
@@ -147,10 +160,11 @@ Do not silently "clean up" these, they are existing behaviour:
   "UTF-8 without BOM" silently breaks this again, check the first three bytes after editing.
 - **`MyAppVersion` in the `.iss` is maintained by hand** and duplicates the version that GitVersion
   derives from the tag. It is the only place in the repository where a version number is typed.
-- **The installer is committed.** `Setup/SSHServerRestart-Setup.exe` is tracked although
-  `.gitignore` lists `*.exe`, it needs `git add -f`. Self contained since 1.0.8.0, which puts around
-  28 MB per release into the git history instead of the 6 MB of a framework dependent build,
-  permanently.
+- **The installer is a release asset, not a repository file.** Up to and including 1.0.8 it was
+  committed as `Setup/SSHServerRestart-Setup.exe` with `git add -f`, roughly 6 MB per release and
+  28 MB once the publish became self contained, all of it permanently in the history. Since then it
+  is attached to the GitHub release of its tag and stays out of the repository. The old blobs are
+  still in the history of the commits up to `cd3f564`, that is not worth a history rewrite.
 - **The publish is self contained.** `build-setup-files.bat` passes
   `-r win-x64 --self-contained true`, so the target machine needs no installed .NET runtime. Judge
   it by `runtimeconfig.json`: `includedFrameworks` means self contained, a `frameworks` block means
@@ -187,8 +201,13 @@ version such as `1.0.8-3+Branch.master.Sha...` into the shipped executable.
    the current directory, so it has to be started from there.
 7. Compile the installer: `ISCC.exe Setup\SSHServerRestart-Setup.iss`. Output goes to
    `Setup/SSHServerRestart-Setup.exe`.
-8. `git add -f Setup/SSHServerRestart-Setup.exe`, commit as `Updated setup files.`.
-9. Push the commits and the tag.
+8. Push the commits and the tag.
+9. Create the GitHub release for the tag and attach the installer to it, for example
+   `gh release create 1.0.8 Setup\SSHServerRestart-Setup.exe --title 1.0.8 --notes "..."` with the
+   changelog line as the notes. `gh` is not installed on this machine, the fallback is the REST API
+   (`POST /repos/SeppPenner/SSHServerRestart/releases`, then the `upload_url` for the asset) with the
+   token that `git credential fill` returns for `github.com`. Never commit the installer, never write
+   the token into a file.
 
 The version in the `Changelog.md` has four parts (`1.0.8.0`), the tag has three (`1.0.8`).
 
