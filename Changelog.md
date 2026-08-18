@@ -1,5 +1,6 @@
 # Change history
 
+* **Version 1.0.8.0 (2026-08-18)** : Updated Nuget packages, moved to Net 10.0, made the console output visible, published self contained, fixed the setup script encoding.
 * **Version 1.0.7.0 (2025-01-09)** : Updated Nuget packages, added audit mode, moved to Net9.0.
 * **Version 1.0.6.0 (2024-01-04)** : Updated nuget packages, moved to Net 8.0.
 * **Version 1.0.5.0 (2022-12-06)** : Updated nuget packages, moved to Net 7.0.
