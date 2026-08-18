@@ -37,8 +37,16 @@ Layout inside `src/SSHServerRestart`:
 - `GlobalUsings.cs`: all usings of the project.
 
 Repository root: `README.md` (the only user documentation, badges plus a link to the changelog),
-`Changelog.md`, `License.txt` (MIT), `.gitignore`, `.gitattributes` and the `Setup` folder. There is
-no `Updating.md`, no `HowToUse.md` and no screenshots.
+`Changelog.md`, `License.txt` (MIT), `.gitignore`, `.gitattributes`, the `Setup` folder and the
+`scripts` folder. There is no `Updating.md`, no `HowToUse.md` and no screenshots.
+
+`scripts` holds one file:
+
+- `github_release.ps1`: creates the GitHub release for a tag and uploads the installer as its asset.
+  The token comes from `git credential fill` for `github.com`, so it is never passed on a command
+  line or written anywhere. A rerun for the same tag reuses the release and only replaces the asset.
+  The repository is hardcoded in `$repository`, adjust that line when the script is copied into a
+  sibling repository.
 
 `Setup` holds two tracked files:
 
@@ -202,12 +210,11 @@ version such as `1.0.8-3+Branch.master.Sha...` into the shipped executable.
 7. Compile the installer: `ISCC.exe Setup\SSHServerRestart-Setup.iss`. Output goes to
    `Setup/SSHServerRestart-Setup.exe`.
 8. Push the commits and the tag.
-9. Create the GitHub release for the tag and attach the installer to it, for example
-   `gh release create 1.0.8 Setup\SSHServerRestart-Setup.exe --title 1.0.8 --notes "..."` with the
-   changelog line as the notes. `gh` is not installed on this machine, the fallback is the REST API
-   (`POST /repos/SeppPenner/SSHServerRestart/releases`, then the `upload_url` for the asset) with the
-   token that `git credential fill` returns for `github.com`. Never commit the installer, never write
-   the token into a file.
+9. Create the GitHub release for the tag and attach the installer to it:
+   `.\scripts\github_release.ps1 -Tag 1.0.8 -AssetPath .\Setup\SSHServerRestart-Setup.exe`. The
+   notes default to the matching `Changelog.md` entry, so the entry has to exist first. `gh` is not
+   installed on this machine, the script talks to the REST API directly. Never commit the installer,
+   never write the token into a file.
 
 The version in the `Changelog.md` has four parts (`1.0.8.0`), the tag has three (`1.0.8`).
 
