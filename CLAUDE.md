@@ -177,16 +177,16 @@ Do not silently "clean up" these, they are existing behaviour:
   `-r win-x64 --self-contained true`, so the target machine needs no installed .NET runtime. Judge
   it by `runtimeconfig.json`: `includedFrameworks` means self contained, a `frameworks` block means
   framework dependent.
-- **Quick launch icon on Windows 7.** The `.iss` creates a quick launch shortcut under
-  `{userappdata}`, restricted to `OnlyBelowVersion: 0,6.1`, so it never triggers on a supported
-  Windows. Inno Setup still warns about it because the installer requires admin rights. Removing
-  those two lines would make the compile warning free.
+- **The quick launch icon is gone.** Up to and including 1.0.8 the `.iss` created a quick launch
+  shortcut under `{userappdata}`, restricted to `OnlyBelowVersion: 0,6.1`, so it never triggered on a
+  supported Windows, and Inno Setup warned about it because the installer requires admin rights. Both
+  lines are removed, the compile is warning free, keep it that way.
 - **`src/SSHServerRestart.sln.DotSettings`** is tracked and holds nothing but a ReSharper user
   dictionary of the German words from the console output (`beenden`, `Beliebige`, `dr_00FCcken`,
   `H_00E4mmer`, ...). Leave it alone.
 - **`.gitattributes` is the unmodified Visual Studio template** with `* text=auto` active and every
-  specific rule commented out. There is no binary rule for the tracked installer, git recognises it
-  by heuristic.
+  specific rule commented out. The only tracked binary is `src/SSHServerRestart/Restart.ico`, git
+  recognises it by heuristic.
 - **AppVeyor and Snyk badges without CI in the repository.** `README.md` links builds that are
   configured outside of this repository. There is no pipeline file here.
 - **`README.md`** is spelled with capitals here, the sibling repositories use `Readme.md`. The link
